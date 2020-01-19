@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { gql } from 'apollo-boost';
 import { graphql} from 'react-apollo'
 import {flowRight as compose} from 'lodash'
-import {getBookQuery,getAuthorQuery,addBookQuery} from '../queries/queries'
+import {getBookQuery,getAuthorQuery,addBookQuery,addAuthorQuery} from '../queries/Queries'
 //import {compose} from 'lodash' 
 
 
@@ -10,7 +10,7 @@ class AddBook extends Component {
     state={
         bookname:"",
         genre : "",
-        authorId:"",
+        authorId:""
         
     }
     displayAuthor(){
@@ -28,13 +28,15 @@ class AddBook extends Component {
 
    submitForm=(event)=>{
    event.preventDefault();
-   console.log(this.state);
     this.props.addBookQuery({
         variables:{
             name:this.state.bookname,
             genre:this.state.genre,
-            authorId:this.state.authorId
-        }
+            authorId:this.state.authorId,
+            
+
+        },
+        refetchQueries:[{query : getBookQuery}]
     })
     console.log(this.state.bookname+","+this.state.genre)
     }
@@ -68,7 +70,7 @@ class AddBook extends Component {
 
 export default compose(
     graphql(getAuthorQuery,{name:"getAuthorQuery"}),
-    //graphql(getBookQuery,{name:"getBookQuery"}),
-    //graphql(addAuthorQuery,{name:"addAuthorQuery"}),
+  //  graphql(getBookQuery,{name:"getBookQuery"}),
+  //  graphql(addAuthorQuery,{name:"addAuthorQuery"}),
     graphql(addBookQuery,{name:"addBookQuery"})
 )(AddBook);
